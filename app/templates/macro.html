@@ -1,0 +1,22 @@
+<!-- macro (Jinja2 function) to generate Select input tags for use in forms
+it sets the default selection, so correct values are displayed according to the database
+it also sets the name/class attributes so the different input fields can be identified easily when updating the database
+The name/class attributes will correspond to the queryID field in the DB, like this each input corresponds to a rowID in the DB for use in the WHERE clause -->
+
+
+{% macro input_field(name, class, status) %}
+	<select name= "{{name}}" class="{{ class }}" onchange="submForm(this)">
+		{% if status == 'Not Assigned'%}<option selected="selected">Not Assigned</option> {% else %} <option>Not Assigned</option> {% endif %}
+        {% if status == 'Assigned'%}<option selected="selected">Assigned</option> {% else %} <option>Assigned</option> {% endif %}
+        {% if status == 'Fixed'%}<option selected="selected">Fixed</option> {% else %} <option>Fixed</option> {% endif %}
+        {% if status == 'Fix Implemented'%}<option selected="selected">Fix Implemented</option> {% else %} <option>Fix Implemented</option> {% endif %}
+	</select>
+{% endmacro %}
+
+
+
+{% macro sql_text_button(class) %}
+
+	<a href="#"><div class ="{{class}}" onclick="sqlPopUp(this)">SQL</div></a>
+
+{% endmacro %}

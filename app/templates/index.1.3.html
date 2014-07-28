@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	   
+	<link rel="stylesheet" type="text/css" href="/static/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css.css">   
+    <script type="text/javascript" src="/static/jquery.js"></script>
+</head>
+
+<body>
+
+
+<script type="text/javascript" src="/static/ajax.js"></script>
+
+<a href="/index" id="home"><div>Home</div></a>
+
+<ul id="logout">
+    <li>Logged in as {{g.user.username}}</li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
+
+
+<table>
+
+    <tr id="column-headers">
+		<td>ProcID</td>
+        <td>QueryID</td>	
+        <td>UserName</td>
+        <td>SessionID</td>
+        <td>AppID</td>
+        <td>ClientID</td>
+        <td>LastRespTime</td>
+        <td>ElapsedTime</td>
+        <td>DelayInMinutes</td>
+        <td>NumSteps</td>
+        <td>TotalIOCount</td>
+        <td>TotalCPUTime</td>
+        <td>CPU_Skew</td>
+        <td>IO_Skew</td>                   
+        <td>SpoolUsage</td>
+        <td>PJI</td>
+        <td>UII</td>
+        <td>SQL</td>
+        <td>Status</td>
+        <td>Assigned</td>     
+	</tr>
+
+        <!-- generating the input fields and setting the name attributes so they can be identified when updating the fields in the form -->
+	<form action="/filter" method="post">
+    <tr id="controls">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    
+    <td>
+    <form action="/filter" method="post">        
+            <select name="total_io_count">
+                {% for val in distinct_io %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter"><br>
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="total_io_count" value="desc">Desc
+        <input type="radio" name="total_io_count" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+
+    <td>    
+    <form action="/filter" method="post">
+
+            <select name="total_cpu_time" onchange="submFilter(this)">
+                {% for val in distinct_cpu %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="total_cpu_time" value="desc">Desc
+        <input type="radio" name="total_cpu_time" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+
+    <td>
+    <form action="/filter" method="post">
+            <select name="cpu_skew" onchange="submFilter(this)">
+                {% for val in distinct_cpu_skew %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="cpu_skew" value="desc">Desc
+        <input type="radio" name="cpu_skew" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+
+    <td>
+    <form action="/filter" method="post">
+            <select name="io_skew" onchange="submFilter(this)">
+                {% for val in distinct_io_skew %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="io_skew" value="desc">Desc
+        <input type="radio" name="io_skew" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+    
+    <td>
+    <form action="/filter" method="post">
+            <select name="spool_usage" onchange="submFilter(this)">
+                {% for val in distinct_spool %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="spool_usage" value="desc">Desc
+        <input type="radio" name="spool_usage" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+
+    <td>
+    <form action="/filter" method="post">
+            <select name="pji" onchange="submFilter(this)">
+                {% for val in distinct_pji %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="pji" value="desc">Desc
+        <input type="radio" name="pji" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+
+    <td>
+    <form action="/filter" method="post">
+            <select name="uii" onchange="submFilter(this)">
+                {% for val in distinct_uii %}
+                    <option>{{val[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+    </form>
+    <form action="/order" method="post">
+        <input type="radio" name="uii" value="desc">Desc
+        <input type="radio" name="uii" value="asc">Asc
+        <input type="submit" value="Order">
+    </form>
+    </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    {% import 'macro.html' as macro %}
+
+    {% for query in queries %}
+	<tr class="{{loop.cycle('odd', 'even')}}">
+		
+        
+		<td>{{query.proc_id}}</td>
+		<td>{{query.query_id}}</td>
+		<td>{{query.user_name}}</td>
+		<td>{{query.session_id}}</td>
+		<td>{{query.app_id}}</td>
+		<td>{{query.client_id}}</td>
+		<td>{{query.last_resp_time}}</td>
+        <td>{{query.elapsed_time}}</td>
+        <td>{{query.delay_in_minutes}}</td>
+		<td>{{query.num_steps}}</td>
+		<td>{{query.total_io_count}}</td>
+		<td>{{query.total_cpu_time}}</td>
+		<td>{{query.cpu_skew}}</td>
+		<td>{{query.io_skew}}</td>
+		<td>{{query.spool_usage}}</td>
+        <td>{{query.pji}}</td>
+        <td>{{query.uii}}</td>
+        <td>
+            {{macro.sql_text_button(query.id)}}
+        </td>
+        <td>        
+
+            {{macro.input_field("status", query.id, query.status)}}
+
+        </td>
+
+
+        <td>{{query.owner.username}}</td>	
+	</tr>
+	{% endfor %}
+
+</table>	
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,86 @@
+mkdir application_main
+cd application_main
+
+(get virtualenv or it's in the app's main folder)
+
+python virtualenv.py flask						 (application_main > flask(virtualenv folder))
+
+
+Install Flask and dependencies:
+Windows:
+flask\Scripts\pip install flask==0.9
+flask\Scripts\pip install flask-login
+flask\Scripts\pip install flask-openid
+flask\Scripts\pip install sqlalchemy==0.7.9
+flask\Scripts\pip install flask-sqlalchemy==0.16
+flask\Scripts\pip install sqlalchemy-migrate==0.7.2
+flask\Scripts\pip install flask-whooshalchemy==0.55a
+flask\Scripts\pip install flask-wtf==0.8.4
+flask\Scripts\pip install pytz==2013b
+flask\Scripts\pip install flask-babel==0.8
+flask\Scripts\pip install flup
+flask\Scripts\pip install --no-deps lamson chardet flask-mail==0.7.6
+
+Linux:
+flask/bin/pip install flask==0.9
+flask/bin/pip install flask-login
+flask/bin/pip install flask-openid
+flask/bin/pip install flask-mail==0.7.6
+flask/bin/pip install sqlalchemy==0.7.9
+flask/bin/pip install flask-sqlalchemy==0.16
+flask/bin/pip install sqlalchemy-migrate==0.7.2
+flask/bin/pip install flask-whooshalchemy==0.55a
+flask/bin/pip install flask-wtf==0.8.4
+flask/bin/pip install pytz==2013b
+flask/bin/pip install flask-babel==0.8
+flask/bin/pip install flup
+
+
+
+Folder Structure(Recommended):
+mkdir app
+mkdir app/static
+mkdir app/templates
+mkdir tmp
+
+application_main
+	/app
+		/static
+		/templates
+		/__init__.py
+		/models.py
+		/views.py
+	/flask
+	/tmp
+	/run.py
+
+
+First step packages:
+/*** __init__.py ***/
+
+	from flask import Flask
+
+	app = Flask(__name__)
+	from app import views
+
+/*** views.py ***/
+
+	from app import app
+
+	@app.route('/')
+	@app.route('/index')
+	def index():
+		return "Hello, Stranger!"
+
+/*** run.py ***/
+	
+	#!flask/bin/python
+	from app import app
+	app.run(debug = True)
+
+
+
+
+***********************************
+Runs on http://localhost:5000
+***********************************

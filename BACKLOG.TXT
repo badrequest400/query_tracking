@@ -1,0 +1,18 @@
+COLUMNS:
+
+USER ASSIGNED
+USER ASSIGNED TO
+COMMENTS
+START END ASSIGNMENT
+START END IMPLEMETATION
+
+
+
+
+make registration available on login form as well
+
+make admin panel to grant privileges, administer users
+
+password hashing
+
+sqltextinfo in TERADATA VARCHAR(31,000) - change it in model
